@@ -1,13 +1,13 @@
 """ESI StudyMate Agent.
 
 A simple AI study assistant built using LangChain's create_agent,
-with tools and short-term conversation memory.
+with Google Gemini (ChatGoogleGenerativeAI), tools, and short-term memory.
 """
 
 import os
 from dotenv import load_dotenv
 from langchain.agents import create_agent
-from langchain_openai import ChatOpenAI
+from langchain_google_genai import ChatGoogleGenerativeAI
 from langgraph.checkpoint.memory import MemorySaver
 from tools import search_course_material, calculator
 
@@ -34,15 +34,19 @@ tools = [search_course_material, calculator]
 
 
 def get_agent():
-    """Create and return the StudyMate agent."""
-    api_key = os.getenv("OPENAI_API_KEY", "")
-    if not api_key:
-        api_key = "placeholder-key"
+    """Create and return the StudyMate agent powered by Google Gemini."""
+    # Read Google API key
+    google_key = os.getenv("GOOGLE_API_KEY", os.getenv("GEMINI_API_KEY", ""))
+    if not google_key:
+        google_key = "placeholder-key"
 
-    model = ChatOpenAI(
-        model=os.getenv("LLM_MODEL", "gpt-4o-mini"),
+    # Gemini model (e.g. gemini-2.5-flash, gemini-1.5-flash, or custom)
+    model_name = os.getenv("GEMINI_MODEL", os.getenv("LLM_MODEL", "gemini-2.5-flash"))
+
+    model = ChatGoogleGenerativeAI(
+        model=model_name,
+        google_api_key=google_key,
         temperature=0,
-        api_key=api_key,
     )
 
     agent = create_agent(

@@ -1,7 +1,7 @@
 """ESI StudyMate - Streamlit Application.
 
 A simple AI study assistant interface that lets students upload course materials
-and chat with an agent that retrieves relevant course information and uses tools.
+and chat with an agent powered by Google Gemini that retrieves relevant course information and uses tools.
 """
 
 from pathlib import Path
@@ -16,7 +16,7 @@ st.set_page_config(
 )
 
 st.title("ESI StudyMate")
-st.caption("AI Study Assistant for University Students")
+st.caption("AI Study Assistant for University Students (Powered by Google Gemini)")
 
 # Sidebar for document management
 with st.sidebar:
@@ -83,7 +83,7 @@ if prompt := st.chat_input("Ask a question about your course..."):
                 )
                 answer = response["messages"][-1].content
             except Exception as e:
-                answer = f"Error: {e}. Please ensure your OPENAI_API_KEY is set in your .env file."
+                answer = f"Error: {e}. Please ensure your GOOGLE_API_KEY is set in your .env file."
 
             st.markdown(answer)
 

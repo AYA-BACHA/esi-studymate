@@ -110,9 +110,10 @@ pip install -r requirements.txt
 ```
 
 ### 2. Configure your API key
-Copy `.env.example` to `.env` and add your OpenAI API key:
+Copy `.env.example` to `.env` and add your Google API key:
 ```bash
-OPENAI_API_KEY=your_openai_api_key_here
+GOOGLE_API_KEY=your_google_api_key_here
+GEMINI_MODEL=gemini-2.5-flash
 ```
 
 ### 3. Run the application
