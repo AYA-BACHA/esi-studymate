@@ -1,0 +1,16 @@
+Chapter 4: Virtual Memory Management and Paging
+
+1. Virtual Memory Definition:
+Virtual memory is a memory management capability of an operating system that uses hardware and software to allow a computer to compensate for physical memory shortages by temporarily transferring data from random access memory (RAM) to disk storage.
+
+2. Paging Mechanism:
+Physical memory is divided into fixed-size contiguous blocks called frames (or page frames). Logical address space is divided into blocks of the same size called pages.
+When a process executes, its pages are mapped into available physical memory frames using a per-process Page Table.
+- Typical page size: 4 KB (4096 bytes).
+- Address translation: Virtual Address = (Page Number, Offset). The Memory Management Unit (MMU) uses the Page Table Base Register (PTBR) and Translation Lookaside Buffer (TLB) for fast hardware translation.
+
+3. Calculation Examples:
+- For a 32-bit virtual address space with 4 KB page size:
+  Number of pages = 2^32 / 4096 = 1,048,576 pages (approx 1 Million pages).
+- Memory blocks allocation:
+  If a file requires 2500 bytes and block size is 512 bytes, the number of required blocks is ceil(2500 / 512) = 5 blocks.
