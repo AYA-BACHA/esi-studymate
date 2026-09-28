@@ -81,16 +81,27 @@ if prompt := st.chat_input("Ask a question about your course..."):
                     {"messages": [{"role": "user", "content": prompt}]},
                     config=config,
                 )
-                answer = response["messages"][-1].content
+                raw_answer = response["messages"][-1].content
+                if isinstance(raw_answer, list):
+                    texts = [item.get("text", "") for item in raw_answer if isinstance(item, dict) and "text" in item]
+                    answer = "\n".join(texts) if texts else str(raw_answer)
+                else:
+                    answer = str(raw_answer)
             except Exception as e:
                 err_str = str(e)
-                if "API_KEY_INVALID" in err_str or "placeholder-key" in err_str or "API key not valid" in err_str:
+                if "503" in err_str or "UNAVAILABLE" in err_str or "high demand" in err_str:
+                    answer = (
+                        "⚠️ **Google Gemini Server High Demand (503)**\n\n"
+                        "Google's servers are temporarily experiencing high traffic for this model.\n\n"
+                        "💡 **Quick fix:** We've set `GEMINI_MODEL=gemini-3.1-flash-lite` in `.env` which is fast and currently active. Please try asking your question again!"
+                    )
+                elif "API_KEY_INVALID" in err_str or "placeholder-key" in err_str or "API key not valid" in err_str:
                     answer = (
                         "⚠️ **Invalid or Missing Google API Key**\n\n"
                         "Please make sure your `.env` file contains a valid Google AI Studio Gemini API key:\n\n"
                         "```bash\n"
                         "GOOGLE_API_KEY=your_key_here\n"
-                        "GEMINI_MODEL=gemini-3.8-flash\n"
+                        "GEMINI_MODEL=gemini-3.1-flash-lite\n"
                         "```\n\n"
                         "👉 You can get a free key at [Google AI Studio](https://aistudio.google.com/app/apikey)."
                     )

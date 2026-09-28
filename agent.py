@@ -43,8 +43,8 @@ def get_agent():
     if not google_key:
         google_key = "placeholder-key"
 
-    # Gemini model (defaults to gemini-3.8-flash or custom)
-    model_name = os.getenv("GEMINI_MODEL", os.getenv("LLM_MODEL", "gemini-3.8-flash"))
+    # Gemini model (defaults to gemini-3.1-flash-lite or custom from .env)
+    model_name = os.getenv("GEMINI_MODEL", os.getenv("LLM_MODEL", "gemini-3.1-flash-lite"))
 
     model = ChatGoogleGenerativeAI(
         model=model_name,
