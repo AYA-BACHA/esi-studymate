@@ -11,7 +11,7 @@ from langchain_google_genai import ChatGoogleGenerativeAI
 from langgraph.checkpoint.memory import MemorySaver
 from tools import search_course_material, calculator
 
-load_dotenv()
+load_dotenv(override=True)
 
 SYSTEM_PROMPT = """You are StudyMate, an AI study assistant for university students.
 
@@ -35,6 +35,7 @@ tools = [search_course_material, calculator]
 
 def get_agent():
     """Create and return the StudyMate agent powered by Google Gemini."""
+    load_dotenv(override=True)
     # Read Google API key
     google_key = os.getenv("GOOGLE_API_KEY", os.getenv("GEMINI_API_KEY", "")).strip()
     if google_key.startswith("GOOGLE_API_KEY="):
@@ -43,8 +44,8 @@ def get_agent():
     if not google_key:
         google_key = "placeholder-key"
 
-    # Gemini model (defaults to gemini-3.1-flash-lite or custom from .env)
-    model_name = os.getenv("GEMINI_MODEL", os.getenv("LLM_MODEL", "gemini-3.1-flash-lite"))
+    # Gemini model (defaults to gemini-flash-lite-latest for stability and high quota)
+    model_name = os.getenv("GEMINI_MODEL", os.getenv("LLM_MODEL", "gemini-flash-lite-latest"))
 
     model = ChatGoogleGenerativeAI(
         model=model_name,

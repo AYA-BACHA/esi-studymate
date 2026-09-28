@@ -93,7 +93,13 @@ if prompt := st.chat_input("Ask a question about your course..."):
                     answer = (
                         "⚠️ **Google Gemini Server High Demand (503)**\n\n"
                         "Google's servers are temporarily experiencing high traffic for this model.\n\n"
-                        "💡 **Quick fix:** We've set `GEMINI_MODEL=gemini-3.1-flash-lite` in `.env` which is fast and currently active. Please try asking your question again!"
+                        "💡 **Quick fix:** We've set `GEMINI_MODEL=gemini-flash-lite-latest` in `.env` which is fast and currently active. Please try asking your question again!"
+                    )
+                elif "429" in err_str or "RESOURCE_EXHAUSTED" in err_str or "Quota exceeded" in err_str:
+                    answer = (
+                        "⚠️ **Daily Quota Reached for Model (429)**\n\n"
+                        "The free tier quota for this specific model has reached its temporary limit.\n\n"
+                        "💡 **Quick fix:** Use `GEMINI_MODEL=gemini-flash-lite-latest` in your `.env` file, which has higher quota and is working right now."
                     )
                 elif "API_KEY_INVALID" in err_str or "placeholder-key" in err_str or "API key not valid" in err_str:
                     answer = (
@@ -101,7 +107,7 @@ if prompt := st.chat_input("Ask a question about your course..."):
                         "Please make sure your `.env` file contains a valid Google AI Studio Gemini API key:\n\n"
                         "```bash\n"
                         "GOOGLE_API_KEY=your_key_here\n"
-                        "GEMINI_MODEL=gemini-3.1-flash-lite\n"
+                        "GEMINI_MODEL=gemini-flash-lite-latest\n"
                         "```\n\n"
                         "👉 You can get a free key at [Google AI Studio](https://aistudio.google.com/app/apikey)."
                     )
