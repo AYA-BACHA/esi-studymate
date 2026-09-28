@@ -36,12 +36,15 @@ tools = [search_course_material, calculator]
 def get_agent():
     """Create and return the StudyMate agent powered by Google Gemini."""
     # Read Google API key
-    google_key = os.getenv("GOOGLE_API_KEY", os.getenv("GEMINI_API_KEY", ""))
+    google_key = os.getenv("GOOGLE_API_KEY", os.getenv("GEMINI_API_KEY", "")).strip()
+    if google_key.startswith("GOOGLE_API_KEY="):
+        google_key = google_key.split("GOOGLE_API_KEY=", 1)[1].strip()
+
     if not google_key:
         google_key = "placeholder-key"
 
-    # Gemini model (e.g. gemini-2.5-flash, gemini-1.5-flash, or custom)
-    model_name = os.getenv("GEMINI_MODEL", os.getenv("LLM_MODEL", "gemini-2.5-flash"))
+    # Gemini model (defaults to gemini-3.8-flash or custom)
+    model_name = os.getenv("GEMINI_MODEL", os.getenv("LLM_MODEL", "gemini-3.8-flash"))
 
     model = ChatGoogleGenerativeAI(
         model=model_name,

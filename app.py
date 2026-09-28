@@ -83,7 +83,25 @@ if prompt := st.chat_input("Ask a question about your course..."):
                 )
                 answer = response["messages"][-1].content
             except Exception as e:
-                answer = f"Error: {e}. Please ensure your GOOGLE_API_KEY is set in your .env file."
+                err_str = str(e)
+                if "API_KEY_INVALID" in err_str or "placeholder-key" in err_str or "API key not valid" in err_str:
+                    answer = (
+                        "⚠️ **Invalid or Missing Google API Key**\n\n"
+                        "Please make sure your `.env` file contains a valid Google AI Studio Gemini API key:\n\n"
+                        "```bash\n"
+                        "GOOGLE_API_KEY=your_key_here\n"
+                        "GEMINI_MODEL=gemini-3.8-flash\n"
+                        "```\n\n"
+                        "👉 You can get a free key at [Google AI Studio](https://aistudio.google.com/app/apikey)."
+                    )
+                elif "PERMISSION_DENIED" in err_str or "denied access" in err_str:
+                    answer = (
+                        "⚠️ **Google API Permission Denied (403)**\n\n"
+                        "This Google API key was denied access by Google's servers.\n\n"
+                        "👉 Please generate a fresh free Gemini key at [Google AI Studio](https://aistudio.google.com/app/apikey) and put it into your `.env` file."
+                    )
+                else:
+                    answer = f"Error: {e}\n\nPlease verify your GOOGLE_API_KEY and GEMINI_MODEL in `.env`."
 
             st.markdown(answer)
 
